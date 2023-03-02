@@ -1,0 +1,6 @@
+trips_0.tsv
+terraform/variables.tf
+terraform/terraform.*
+terraform/.terraform*
+data/trips_*
+data/create.sh
