@@ -12,6 +12,38 @@ This was built and tested on an Apple Silicon mac, it hasn't really be valiated 
 * [Aiven CLI](https://docs.aiven.io/docs/tools/cli)
 * Aiven account and an [authentication token](https://docs.aiven.io/docs/platform/howto/create_authentication_token)
 
+The full details of what I am running at time of writing  
+```
+ClickHouse 22.9.1.1497 with revision 54466
+
+$> terraform -version
+Terraform v1.1.9
+on darwin_arm64
+
+$> avn --version 
+aiven-client 2.14.8
+
+$> system_profiler SPSoftwareDataType SPHardwareDataType
+Software:
+
+    System Software Overview:
+
+      System Version: macOS 13.2 (22D49)
+      Kernel Version: Darwin 22.3.0
+
+Hardware:
+
+    Hardware Overview:
+
+      Model Name: MacBook Pro
+      Model Identifier: MacBookPro18,1
+      Chip: Apple M1 Pro
+      Total Number of Cores: 10 (8 performance and 2 efficiency)
+      Memory: 16 GB
+      System Firmware Version: 8419.80.7
+      OS Loader Version: 8419.80.7
+```
+
 ## Setup
 Once you have downloaded this repository `git clone git@github.com:troysellers/ny-taxi-ch-demo.git`
 
