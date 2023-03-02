@@ -28,8 +28,8 @@ Software:
 
     System Software Overview:
 
-      System Version: macOS 13.2 (22D49)
-      Kernel Version: Darwin 22.3.0
+      System Version: macOS 13.x 
+      Kernel Version: Darwin 22.x
 
 Hardware:
 
@@ -40,8 +40,6 @@ Hardware:
       Chip: Apple M1 Pro
       Total Number of Cores: 10 (8 performance and 2 efficiency)
       Memory: 16 GB
-      System Firmware Version: 8419.80.7
-      OS Loader Version: 8419.80.7
 ```
 
 ## Setup
