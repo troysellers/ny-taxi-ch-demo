@@ -1,4 +1,4 @@
-# Clickhouse Demo - NY Taxi Data
+# Clickhouse Demo - NY Menu Data
 
 This demo is built following the instructions in the [Clickhouse](https://clickhouse.com/docs/en/getting-started/example-datasets/menus) documentation. 
 
@@ -44,11 +44,17 @@ Hardware:
 
 ## Setup
 Once you have downloaded this repository `git clone git@github.com:troysellers/ny-taxi-ch-demo.git`
+Then, checkout the `ny-menus` branch
+```
+$> cd ny-taxi-ch-demo
+$> git fetch origin
+$> git checkout ny-menus
+```
 
-get the data to work with
+Then, download the data to work with
 
 ```
-$> cd ny-taxi-ch-demo/data
+$> cd data/
 $> ./get-data.sh
 ```
 
@@ -147,31 +153,47 @@ FROM menu_item
 ```
 
 
+Now we can query the data.
 
+Avg historical prices of dishes?
 
 
 ```
-$> select pickup_ntaname, count() as count from trips group by pickup_ntaname order by count desc limit 10
+$> SELECT
+    round(toUInt32OrZero(extract(menu_date, '^\\d{4}')), -1) AS d,
+    count(),
+    round(avg(price), 2),
+    bar(avg(price), 0, 100, 100)
+FROM menu_item_denorm
+WHERE (menu_currency = 'Dollars') AND (d > 0) AND (d < 2022)
+GROUP BY d
+ORDER BY d ASC
 
+Query id: e6dc132b-7447-48fc-adea-c1b111d92d79
 
-Query id: 1ab0a0cf-fc01-495e-88ec-1060bc9d3653
+┌────d─┬─count()─┬─round(avg(price), 2)─┬─bar(avg(price), 0, 100, 100)─┐
+│ 1850 │     618 │                  1.5 │ █▍                           │
+│ 1860 │    1634 │                 1.29 │ █▎                           │
+│ 1870 │    2215 │                 1.36 │ █▎                           │
+│ 1880 │    3909 │                 1.01 │ █                            │
+│ 1890 │    8837 │                  1.4 │ █▍                           │
+│ 1900 │  176292 │                 0.68 │ ▋                            │
+│ 1910 │  212196 │                 0.88 │ ▊                            │
+│ 1920 │  179590 │                 0.74 │ ▋                            │
+│ 1930 │   73707 │                  0.6 │ ▌                            │
+│ 1940 │   58795 │                 0.57 │ ▌                            │
+│ 1950 │   41407 │                 0.95 │ ▊                            │
+│ 1960 │   51179 │                 1.32 │ █▎                           │
+│ 1970 │   12914 │                 1.86 │ █▋                           │
+│ 1980 │    7268 │                 4.35 │ ████▎                        │
+│ 1990 │   11055 │                 6.03 │ ██████                       │
+│ 2000 │    2467 │                11.85 │ ███████████▋                 │
+│ 2010 │     597 │                25.66 │ █████████████████████████▋   │
+└──────┴─────────┴──────────────────────┴──────────────────────────────┘
 
-┌─pickup_ntaname─────────────────────────────┬───count─┐
-│ Midtown-Midtown South                      │ 3460770 │
-│ Hudson Yards-Chelsea-Flatiron-Union Square │ 1893412 │
-│ West Village                               │ 1380513 │
-│ Turtle Bay-East Midtown                    │ 1291080 │
-│ Upper East Side-Carnegie Hill              │ 1214850 │
-│ Airport                                    │  993906 │
-│ SoHo-TriBeCa-Civic Center-Little Italy     │  951070 │
-│ Murray Hill-Kips Bay                       │  909452 │
-│ Upper West Side                            │  893506 │
-│ Clinton                                    │  855681 │
-└────────────────────────────────────────────┴─────────┘
-
-10 rows in set. Elapsed: 0.108 sec. Processed 19.71 million rows, 21.84 MB (182.08 million rows/s., 201.83 MB/s.)
+17 rows in set. Elapsed: 0.230 sec. Processed 1.33 million rows, 54.62 MB (5.77 million rows/s., 236.97 MB/s.)
 ```
 
-Not bad, processing 19.7 million rows in 100ms. 
+
 
 

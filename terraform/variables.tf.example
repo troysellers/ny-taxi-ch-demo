@@ -18,7 +18,7 @@ variable aiven_cloud {
 
 variable service_prefix {
 	type = string
-	default = "ny-taxi-demo-"
+	default = "ny-menus-demo-"
 	description = "String prefix for service names" 
 }
 variable aiven_plan {

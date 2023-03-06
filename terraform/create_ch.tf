@@ -23,9 +23,30 @@ resource "local_file" "create_sh" {
                   --port ${aiven_clickhouse.clickhouse.service_port} \
                   --user ${aiven_clickhouse.clickhouse.service_username} \
                   --password ${aiven_clickhouse.clickhouse.service_password} \
-      < create-table.sql
+      < create-dish.sql
     
-    echo "Created the clickhouse table"
+      clickhouse client --host ${aiven_clickhouse.clickhouse.service_host} \
+                  --secure \
+                  --port ${aiven_clickhouse.clickhouse.service_port} \
+                  --user ${aiven_clickhouse.clickhouse.service_username} \
+                  --password ${aiven_clickhouse.clickhouse.service_password} \
+      < create-menu.sql
+      
+      clickhouse client --host ${aiven_clickhouse.clickhouse.service_host} \
+                  --secure \
+                  --port ${aiven_clickhouse.clickhouse.service_port} \
+                  --user ${aiven_clickhouse.clickhouse.service_username} \
+                  --password ${aiven_clickhouse.clickhouse.service_password} \
+      < create-menupage.sql
+      
+      clickhouse client --host ${aiven_clickhouse.clickhouse.service_host} \
+                  --secure \
+                  --port ${aiven_clickhouse.clickhouse.service_port} \
+                  --user ${aiven_clickhouse.clickhouse.service_username} \
+                  --password ${aiven_clickhouse.clickhouse.service_password} \
+      < create-menuitem.sql
+      
+    echo "Created the clickhouse tables"
 
     clickhouse client --host ${aiven_clickhouse.clickhouse.service_host} \
                   --secure \
