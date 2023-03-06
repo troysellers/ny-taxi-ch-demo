@@ -1,6 +1,6 @@
 # Clickhouse Demo - NY Taxi Data
 
-This demo is built following the instructions in the [Clickhouse](https://clickhouse.com/docs/en/getting-started/example-datasets/nyc-taxi) documentation. 
+This demo is built following the instructions in the [Clickhouse](https://clickhouse.com/docs/en/getting-started/example-datasets/menus) documentation. 
 
 *The terraform script included in this project will create a file that has the credentials for this database in the data directory!! It is a demo, think carefully friends*
 
@@ -52,8 +52,7 @@ $> cd ny-taxi-ch-demo/data
 $> ./get-data.sh
 ```
 
-This might take a few minutes, we are going to get all 20 sets of the data.
-You will end up with a collection of .tsv files that we are going to then load into Clickhouse. 
+This will end up with 4 different files of data that are going to be imported in Clickhouse in a following step.
 
 ## Build the Clickhouse service
 Now move into the terraform directory.
@@ -99,7 +98,58 @@ $> clickhouse client \
     --user <user> 
 ```
 
-Want to see the most popular pickup locations in NY? 
+Firstly, it is good to understand that Clickhouse is probably better suited running denormalised data. 
+So let's go ahead and merge the tables we have just loaded into one so it becomes a little easier to work with.
+
+```
+CREATE TABLE menu_item_denorm
+ENGINE = MergeTree ORDER BY (dish_name, created_at)
+AS SELECT
+    price,
+    high_price,
+    created_at,
+    updated_at,
+    xpos,
+    ypos,
+    dish.id AS dish_id,
+    dish.name AS dish_name,
+    dish.description AS dish_description,
+    dish.menus_appeared AS dish_menus_appeared,
+    dish.times_appeared AS dish_times_appeared,
+    dish.first_appeared AS dish_first_appeared,
+    dish.last_appeared AS dish_last_appeared,
+    dish.lowest_price AS dish_lowest_price,
+    dish.highest_price AS dish_highest_price,
+    menu.id AS menu_id,
+    menu.name AS menu_name,
+    menu.sponsor AS menu_sponsor,
+    menu.event AS menu_event,
+    menu.venue AS menu_venue,
+    menu.place AS menu_place,
+    menu.physical_description AS menu_physical_description,
+    menu.occasion AS menu_occasion,
+    menu.notes AS menu_notes,
+    menu.call_number AS menu_call_number,
+    menu.keywords AS menu_keywords,
+    menu.language AS menu_language,
+    menu.date AS menu_date,
+    menu.location AS menu_location,
+    menu.location_type AS menu_location_type,
+    menu.currency AS menu_currency,
+    menu.currency_symbol AS menu_currency_symbol,
+    menu.status AS menu_status,
+    menu.page_count AS menu_page_count,
+    menu.dish_count AS menu_dish_count
+FROM menu_item
+    JOIN dish ON menu_item.dish_id = dish.id
+    JOIN menu_page ON menu_item.menu_page_id = menu_page.id
+    JOIN menu ON menu_page.menu_id = menu.id;
+```
+
+
+
+
+
 ```
 $> select pickup_ntaname, count() as count from trips group by pickup_ntaname order by count desc limit 10
 

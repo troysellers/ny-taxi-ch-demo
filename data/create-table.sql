@@ -1,21 +1,60 @@
-CREATE TABLE trips (
-    trip_id             UInt32,
-    pickup_datetime     DateTime,
-    dropoff_datetime    DateTime,
-    pickup_longitude    Nullable(Float64),
-    pickup_latitude     Nullable(Float64),
-    dropoff_longitude   Nullable(Float64),
-    dropoff_latitude    Nullable(Float64),
-    passenger_count     UInt8,
-    trip_distance       Float32,
-    fare_amount         Float32,
-    extra               Float32,
-    tip_amount          Float32,
-    tolls_amount        Float32,
-    total_amount        Float32,
-    payment_type        Enum('CSH' = 1, 'CRE' = 2, 'NOC' = 3, 'DIS' = 4, 'UNK' = 5),
-    pickup_ntaname      LowCardinality(String),
-    dropoff_ntaname     LowCardinality(String)
-)
-ENGINE = MergeTree
-PRIMARY KEY (pickup_datetime, dropoff_datetime)
+CREATE TABLE dish
+(
+    id UInt32,
+    name String,
+    description String,
+    menus_appeared UInt32,
+    times_appeared Int32,
+    first_appeared UInt16,
+    last_appeared UInt16,
+    lowest_price Decimal64(3),
+    highest_price Decimal64(3)
+) ENGINE = ReplicatedMergeTree ORDER BY id;
+
+CREATE TABLE menu
+(
+    id UInt32,
+    name String,
+    sponsor String,
+    event String,
+    venue String,
+    place String,
+    physical_description String,
+    occasion String,
+    notes String,
+    call_number String,
+    keywords String,
+    language String,
+    date String,
+    location String,
+    location_type String,
+    currency String,
+    currency_symbol String,
+    status String,
+    page_count UInt16,
+    dish_count UInt16
+) ENGINE = ReplicatedMergeTree ORDER BY id;
+
+CREATE TABLE menu_page
+(
+    id UInt32,
+    menu_id UInt32,
+    page_number UInt16,
+    image_id String,
+    full_height UInt16,
+    full_width UInt16,
+    uuid UUID
+) ENGINE = ReplicatedMergeTree ORDER BY id;
+
+CREATE TABLE menu_item
+(
+    id UInt32,
+    menu_page_id UInt32,
+    price Decimal64(3),
+    high_price Decimal64(3),
+    dish_id UInt32,
+    created_at DateTime,
+    updated_at DateTime,
+    xpos Float64,
+    ypos Float64
+) ENGINE = ReplicatedMergeTree ORDER BY id;
