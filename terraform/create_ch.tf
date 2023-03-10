@@ -91,6 +91,13 @@ resource "local_file" "create_sh" {
                   --date_time_input_format best_effort \
                   --query "INSERT INTO menu_item FORMAT CSVWithNames" < MenuItem.csv
 
+    clickhouse client --host ${aiven_clickhouse.clickhouse.service_host} \
+                  --secure \
+                  --port ${aiven_clickhouse.clickhouse.service_port} \
+                  --user ${aiven_clickhouse.clickhouse.service_username} \
+                  --password ${aiven_clickhouse.clickhouse.service_password} \
+      < denorm.sql
+
     echo "finished loading datasets"
 
     EOF
