@@ -7,7 +7,7 @@ This demo is built following the instructions in the [Clickhouse](https://clickh
 ## Pre-requisites
 This was built and tested on an Apple Silicon mac, it hasn't really be valiated on anything else. 
 
-* An [Aiven free trial](https://console.aiven.io/signup?credit_code=everythingopen-conf) account
+* An [Aiven free trial](https://console.aiven.io/signup?credit_code=eo23) account
 * [Clickhouse binary](https://clickhouse.com/docs/en/install)
 * [Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
 * [Aiven CLI](https://docs.aiven.io/docs/tools/cli)
